@@ -15,6 +15,11 @@ function sortElements() {
 	});
 }
 
+function comparisionPercent(a, b) {
+	let ratio = a / b;
+	return `${(ratio*100).toFixed(0)}%`
+}
+
 function updateTable() {
 	var table = document.getElementById("myTable");
 	// clear table
@@ -31,15 +36,29 @@ function updateTable() {
 	headerRow.insertCell(j++).innerHTML = "Price per area";
 	headerRow.insertCell(j++).innerHTML = "";
 
+	// Wether to compare entries to previous entry
+	var doCompare = document.getElementById("comparisonInput").checked
+
 	// add entries
 	var body = table.createTBody();
 	for (var i = 0; i < elements.length; i++) {
 		var row = body.insertRow(-1);
 		var j = 0;
-		row.insertCell(j++).innerHTML = elements[i].diameter;
-		row.insertCell(j++).innerHTML = elements[i].price;
-		row.insertCell(j++).innerHTML = elements[i].area.toFixed(2);
-		row.insertCell(j++).innerHTML = elements[i].pricePerArea.toFixed(4);
+		var diameter = elements[i].diameter + " cm";
+		var price    = elements[i].price + " €";
+		var area     = elements[i].area.toFixed(2) + " cm²";
+		var ppa      = elements[i].pricePerArea.toFixed(4) + " €/cm²";
+		if (doCompare && i > 0) {
+			diameter += ` (${comparisionPercent(elements[i].diameter    , elements[i-1].diameter    )})`
+			price    += ` (${comparisionPercent(elements[i].price       , elements[i-1].price       )})`
+			area     += ` (${comparisionPercent(elements[i].area        , elements[i-1].area        )})`
+			ppa      += ` (${comparisionPercent(elements[i].pricePerArea, elements[i-1].pricePerArea)})`
+		}
+
+		row.insertCell(j++).innerHTML = diameter;
+		row.insertCell(j++).innerHTML = price;
+		row.insertCell(j++).innerHTML = area;
+		row.insertCell(j++).innerHTML = ppa;
 
 		var span = document.createElement("SPAN");
 		var txt = document.createTextNode("\u00D7");
@@ -47,11 +66,8 @@ function updateTable() {
 		span.onclick = function() {
 			// remove from elements and update table
 			var rowIndex = this.parentNode.parentNode.rowIndex;
-			console.log(`now removing ${rowIndex}`);
 			document.getElementById("myTable").deleteRow(rowIndex);
 			elements.splice(rowIndex-1, 1);
-			console.log('elements after removal:')
-			console.log(elements);
 			updateTable();
 		}
 		row.insertCell(j++).appendChild(span);
@@ -59,13 +75,17 @@ function updateTable() {
 		table.appendChild(row);
 	}
 
+	// Show the comparison checkbox
+	if (elements.length >= 2) {
+		document.getElementById("comparisonDiv").style.display = "inline"
+	}
 }
 
 // Create a new list item when clicking on the "Add" button
 function newElement() {
-	
 	var diameter = document.getElementById("diameterInput").value;
 	var price    = document.getElementById("priceInput").value;
+	
 	if (diameter === '' || price === '') {
 		alert("Please fill in all fields");
 		return;
@@ -87,5 +107,8 @@ function newElement() {
 	sortElements();
 	updateTable();
 } 
+
+// Hide the comparison checkbox by default
+document.getElementById("comparisonDiv").style.display = "none"
 
 updateTable();

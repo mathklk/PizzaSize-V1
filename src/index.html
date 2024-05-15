@@ -1,24 +1,39 @@
 <html>
 	<head>
 		<title>Pizza Size App</title>
-		<link rel="stylesheet" type="text/css" href="styles.css">
+		<link rel="stylesheet" type="text/css" href="Pizza%20Size%20App-Dateien/styles.css">
 	</head>
 	<body>
-		<div id="myDIV" class="header">
-			<h2>Pizza Size App</h2>
-			Pizza diameter:
-			<input class="numInput" type="number" id="diameterInput">
-			Price:
-			<input class="numInput" type="number" id="priceInput">
-			<button type="button" onclick="newElement()">Add</button>
+		<div>
+			<div>
+				<h2>Pizza Size App</h2>
+				Pizza diameter:
+				<script>
+					function isDigit(event) { return event.charCode >= 48 && event.charCode <= 57; }
+				</script>
+				<input class="numInput" id="diameterInput" onkeypress="return isDigit(event)">
+				cm&nbsp;&nbsp;&nbsp;Price:
+				<input class="numInput" id="priceInput" onkeypress="return isDigit(event)">
+				€&nbsp;&nbsp;&nbsp;
+				<button type="button" onclick="newElement()">Add</button>
+			</div>
 		</div>
-	
-		<table id="myTable"></table>
+		
+		<div id="tableDiv">
+			<table id="myTable"><thead><tr><td>Diameter</td><td>Price</td><td>Area</td><td>Price per area</td><td></td></tr></thead><tbody></tbody></table>
+
+			<div id="comparisonDiv">
+				<input type="checkbox" id="comparisonInput" onchange="updateTable()">
+				<label for="comparisonInput">Show comparison</label>
+			</div>
+		</div>
+
+		
 
 		<a href="https://github.com/mathklk/PizzaSize/" class="github-icon">
-			<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="50" height="50">
+			<img src="Pizza%20Size%20App-Dateien/GitHub-Mark.png" alt="GitHub" width="50" height="50">
 		</a>
-
-		<script src="index.js"></script>
+		
+		<script src="Pizza%20Size%20App-Dateien/index.js"></script>
 	</body>
 </html>
